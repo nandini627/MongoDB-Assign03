@@ -17,6 +17,7 @@ router.get("/query", queryNotes);
 router.get("/search", searchTitle);
 router.get("/search/content", searchContent);
 router.put("/:id", UpdateById);
+router.patch("/:id", UpdateFieldId);
 
 
 module.exports = router;
