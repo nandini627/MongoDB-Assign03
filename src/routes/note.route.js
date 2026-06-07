@@ -11,6 +11,7 @@ const {
   deleteById,
   deleteMulti,
   searchTitle,
+  searchContent,
   
 } = require("../controllers/note.controller");
 

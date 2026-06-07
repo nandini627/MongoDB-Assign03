@@ -305,6 +305,21 @@ const searchTitle = async (req, res) => {
   }
 };
 
+const searchContent = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+
+    const notes = await Note.find({
+      content: { $regex: keyword, $options: "i" },
+    });
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
@@ -314,7 +329,8 @@ module.exports = {
   UpdateById:UpdateById,
   UpdateFieldId:UpdateFieldId,
   deleteById:deleteById,
-  deleteMulti:deleteMulti
+  deleteMulti:deleteMulti,
+  searchContent:searchContent
 
 
   
