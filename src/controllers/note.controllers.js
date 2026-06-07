@@ -258,6 +258,38 @@ const deleteById = async (req, res) => {
   }
 };
 
+//// Delete multiple notes
+const deleteMulti = async (req, res) => {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "IDs array is required and cannot be empty",
+        data: null
+      });
+    }
+
+    const result = await Note.deleteMany({
+      _id: { $in: ids }
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `${result.deletedCount} notes deleted successfully`,
+      data: null
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      data: null
+    });
+  }
+};
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
@@ -265,7 +297,8 @@ module.exports = {
   getNotesById:getNotesById,
   UpdateById:UpdateById,
   UpdateFieldId:UpdateFieldId,
-  deleteById:deleteById
+  deleteById:deleteById,
+  deleteMulti:deleteMulti
 
 
   
