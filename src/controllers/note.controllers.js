@@ -399,6 +399,31 @@ const sortPaginate = async (req, res) => {
   }
 };
 
+// searchFilter
+
+const searchFilter = async (req, res) => {
+  try {
+    const { keyword, category } = req.query;
+
+    const filter = {};
+
+    if (category) filter.category = category;
+
+    if (keyword) {
+      filter.$or = [
+        { title: { $regex: keyword, $options: "i" } },
+        { content: { $regex: keyword, $options: "i" } },
+      ];
+    }
+
+    const notes = await Note.find(filter);
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   createNote: createNote,
@@ -414,7 +439,9 @@ module.exports = {
   searchAll:searchAll,
   filterSort:filterSort,
   filterPaginate:filterPaginate,
-  sortPaginate:sortPaginate
+  sortPaginate:sortPaginate,
+  searchFilter:searchFilter
+
 
 
   
