@@ -220,13 +220,53 @@ const UpdateFieldId = async (req, res) => {
   }
 };
 
+//// Delete note by ID
+const deleteById = async (req, res) => {
+  try {
+    const noteId = req.params.id;
+
+    if (!isValidId(noteId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid note ID",
+        data: null
+      });
+    }
+
+    const deletedNote = await Note.findByIdAndDelete(noteId);
+
+    if (!deletedNote) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+        data: null
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Note deleted successfully",
+      data: null
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      data: null
+    });
+  }
+};
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
   getAllNotes:getAllNotes,
   getNotesById:getNotesById,
   UpdateById:UpdateById,
-  UpdateFieldId:UpdateFieldId
+  UpdateFieldId:UpdateFieldId,
+  deleteById:deleteById
+
 
   
 };

@@ -6,7 +6,9 @@ const {
   multipleNotes,
   getAllNotes,
   getNotesById,
-  UpdateById
+  UpdateById,
+  UpdateFieldId,
+  deleteById
   
 } = require("../controllers/note.controller");
 
@@ -18,6 +20,7 @@ router.get("/search", searchTitle);
 router.get("/search/content", searchContent);
 router.put("/:id", UpdateById);
 router.patch("/:id", UpdateFieldId);
+router.delete("/:id", deleteById);
 
 
 module.exports = router;
