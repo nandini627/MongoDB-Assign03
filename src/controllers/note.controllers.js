@@ -455,6 +455,50 @@ const searchSortPaginate = async (req, res) => {
   }
 };
 
+const queryNotes = async (req, res) => {
+  try {
+    const {
+      keyword,
+      category,
+      priority,
+      sortBy = "createdAt",
+      order = "desc",
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {};
+
+    if (category) filter.category = category;
+
+    if (priority) filter.priority = priority;
+
+    if (keyword) {
+      filter.$or = [
+        { title: { $regex: keyword, $options: "i" } },
+        { content: { $regex: keyword, $options: "i" } },
+      ];
+    }
+
+    const notes = await Note.find(filter)
+      .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const total = await Note.countDocuments(filter);
+
+    res.status(200).json({
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / limit),
+      notes,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 module.exports = {
@@ -473,7 +517,8 @@ module.exports = {
   filterPaginate:filterPaginate,
   sortPaginate:sortPaginate,
   searchFilter:searchFilter,
-  searchSortPaginate:searchSortPaginate
+  searchSortPaginate:searchSortPaginate,
+  queryNotes:queryNotes
 
 
 

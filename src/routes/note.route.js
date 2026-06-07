@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  createNote,
+   createNote,
   multipleNotes,
   getAllNotes,
   getNotesById,
@@ -17,7 +17,9 @@ const {
   filterPaginate,
   sortPaginate,
   searchFilter,
-  searchSortPaginate
+  searchSortPaginate,
+  filterSortPaginate,
+  queryNotes
 
   
 } = require("../controllers/note.controller");
@@ -26,27 +28,30 @@ router.post("/", createNote);
 router.post("/bulk", multipleNotes);
 router.get("/query", queryNotes);
 
+
 router.get("/search", searchTitle);
 router.get("/search/content", searchContent);
 router.get("/search/all", searchAll);
+
+
+router.get("/filter-sort", filterSort);
 router.get("/filter-paginate", filterPaginate);
 router.get("/sort-paginate", sortPaginate);
-router.get("/filter-sort", filterSort);
+router.get("/search-filter", searchFilter);
+router.get("/search-sort-paginate", searchSortPaginate);
+router.get("/filter-sort-paginate", filterSortPaginate);
+
+
+router.get("/", getAllNotes);
+router.get("/:id", getNotesById);
+
+
 router.put("/:id", UpdateById);
 router.patch("/:id", UpdateFieldId);
-router.delete("/:id", deleteById);
+
+
 router.delete("/bulk", deleteMulti);
-router.get("search-filter",searchFilter);
-router.get("search-sort-paginate",searchSortPaginate);
-
-
-
-
-
-
-
-
-
+router.delete("/:id", deleteById);
 
 
 module.exports = router;
