@@ -14,6 +14,7 @@ const {
   searchContent,
   searchAll,
   filterSort,
+  filterPaginate,
   
 } = require("../controllers/note.controller");
 
@@ -24,11 +25,14 @@ router.get("/query", queryNotes);
 router.get("/search", searchTitle);
 router.get("/search/content", searchContent);
 router.get("/search/all", searchAll);
+router.get("/filter-paginate", filterPaginate);
 router.get("/filter-sort", filterSort);
 router.put("/:id", UpdateById);
 router.patch("/:id", UpdateFieldId);
 router.delete("/:id", deleteById);
 router.delete("/bulk", deleteMulti);
+
+
 
 
 

@@ -358,6 +358,26 @@ const filterSort = async (req, res) => {
   }
 };
 
+// filter paginate
+
+const filterPaginate = async (req, res) => {
+  try {
+    const { category, page = 1, limit = 5 } = req.query;
+
+    const filter = {};
+
+    if (category) filter.category = category;
+
+    const notes = await Note.find(filter)
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
@@ -370,7 +390,8 @@ module.exports = {
   deleteMulti:deleteMulti,
   searchContent:searchContent,
   searchAll:searchAll,
-  filterSort:filterSort
+  filterSort:filterSort,
+  filterPaginate:filterPaginate
 
 
   
