@@ -338,6 +338,26 @@ const searchAll = async (req, res) => {
   }
 };
 
+// filter sort
+
+const filterSort = async (req, res) => {
+  try {
+    const { category, sortBy = "createdAt", order = "desc" } = req.query;
+
+    const filter = {};
+
+    if (category) filter.category = category;
+
+    const notes = await Note.find(filter).sort({
+      [sortBy]: order === "asc" ? 1 : -1,
+    });
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
@@ -349,7 +369,8 @@ module.exports = {
   deleteById:deleteById,
   deleteMulti:deleteMulti,
   searchContent:searchContent,
-  searchAll:searchAll
+  searchAll:searchAll,
+  filterSort:filterSort
 
 
   
