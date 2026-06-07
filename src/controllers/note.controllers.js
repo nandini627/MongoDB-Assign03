@@ -424,6 +424,38 @@ const searchFilter = async (req, res) => {
   }
 };
 
+// search-sort-paginate
+const searchSortPaginate = async (req, res) => {
+  try {
+    const {
+      keyword,
+      sortBy = "createdAt",
+      order = "desc",
+      page = 1,
+      limit = 5,
+    } = req.query;
+
+    const filter = {};
+
+    if (keyword) {
+      filter.$or = [
+        { title: { $regex: keyword, $options: "i" } },
+        { content: { $regex: keyword, $options: "i" } },
+      ];
+    }
+
+    const notes = await Note.find(filter)
+      .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 
 module.exports = {
   createNote: createNote,
@@ -440,7 +472,8 @@ module.exports = {
   filterSort:filterSort,
   filterPaginate:filterPaginate,
   sortPaginate:sortPaginate,
-  searchFilter:searchFilter
+  searchFilter:searchFilter,
+  searchSortPaginate:searchSortPaginate
 
 
 

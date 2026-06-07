@@ -16,7 +16,8 @@ const {
   filterSort,
   filterPaginate,
   sortPaginate,
-  searchFilter
+  searchFilter,
+  searchSortPaginate
 
   
 } = require("../controllers/note.controller");
@@ -36,6 +37,7 @@ router.patch("/:id", UpdateFieldId);
 router.delete("/:id", deleteById);
 router.delete("/bulk", deleteMulti);
 router.get("search-filter",searchFilter);
+router.get("search-sort-paginate",searchSortPaginate);
 
 
 
