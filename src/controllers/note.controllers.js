@@ -290,11 +290,27 @@ const deleteMulti = async (req, res) => {
   }
 };
 
+/// search by title
+const searchTitle = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+
+    const notes = await Note.find({
+      title: { $regex: keyword, $options: "i" },
+    });
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
   getAllNotes:getAllNotes,
   getNotesById:getNotesById,
+  searchTitle:searchTitle,
   UpdateById:UpdateById,
   UpdateFieldId:UpdateFieldId,
   deleteById:deleteById,
