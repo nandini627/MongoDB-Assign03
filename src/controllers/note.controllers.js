@@ -319,6 +319,24 @@ const searchContent = async (req, res) => {
   }
 };
 
+// searchAll
+
+const searchAll = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+
+    const notes = await Note.find({
+      $or: [
+        { title: { $regex: keyword, $options: "i" } },
+        { content: { $regex: keyword, $options: "i" } },
+      ],
+    });
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createNote: createNote,
@@ -330,7 +348,8 @@ module.exports = {
   UpdateFieldId:UpdateFieldId,
   deleteById:deleteById,
   deleteMulti:deleteMulti,
-  searchContent:searchContent
+  searchContent:searchContent,
+  searchAll:searchAll
 
 
   
