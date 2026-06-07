@@ -378,6 +378,28 @@ const filterPaginate = async (req, res) => {
   }
 };
 
+// sotr-paginate
+const sortPaginate = async (req, res) => {
+  try {
+    const {
+      sortBy = "createdAt",
+      order = "desc",
+      page = 1,
+      limit = 5,
+    } = req.query;
+
+    const notes = await Note.find()
+      .sort({ [sortBy]: order === "asc" ? 1 : -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createNote: createNote,
   multipleNotes:multipleNotes,
@@ -391,7 +413,8 @@ module.exports = {
   searchContent:searchContent,
   searchAll:searchAll,
   filterSort:filterSort,
-  filterPaginate:filterPaginate
+  filterPaginate:filterPaginate,
+  sortPaginate:sortPaginate
 
 
   
